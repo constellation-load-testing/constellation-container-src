@@ -1,0 +1,18 @@
+version: "0"
+services:
+  prototype:
+    image: athresher/loader_prototype
+    container_name: loader
+    env_file:
+      - .env
+    depends_on:
+      telegraf:
+        condition: service_started
+  telegraf:
+    image: athresher/teleproto
+    container_name: teleproto
+    ports:
+      - 8186:8186
+volumes:
+  data1:
+    driver: local
