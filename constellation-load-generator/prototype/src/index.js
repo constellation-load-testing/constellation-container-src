@@ -23,12 +23,13 @@ const getTestScript = async () => {
 
 const runTest = () => {
   try {
+    const aggTarget = `influxdb=http://${process.env.DNS}`;
     const k6 = spawn('k6', [
       'run',
       '--no-summary',
       '--no-thresholds',
       '--out',
-      'influxdb=http://127.0.0.1:8186',
+      aggTarget,
       'script.js',
     ]
       // `k6 run --no-summary --no-thresholds --out influxdb=http://teleproto:8186 script.js`
