@@ -10,11 +10,11 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "knex:cache": "knex --knexfile ./db/knexfile-cache.js",
-    "migrate:cache": "npm run knex:cache migrate:latest",
-    "rollback:cache": "npm run knex:cache migrate:rollback",
-    "seed:cache": "npm run knex:cache seed:run --specific=1-cache-test.js",
-    "database:init:cache": "npm run rollback:cache && npm run migrate:cache && npm run seed:cache",
+    "knex": "knex --knexfile ./db/knexfile.js",
+    "migrate": "npm run knex migrate:latest",
+    "rollback": "npm run knex migrate:rollback",
+    "seed": "npm run knex seed:run",
+    "database:init": "npm run rollback && npm run migrate && npm run seed",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

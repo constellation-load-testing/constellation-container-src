@@ -1,4 +1,4 @@
-const {TimestreamWriteClient, CreateTableCommand} = require('@aws-sdk/client-timestream-write');
+const {TimestreamWriteClient, CreateTableCommand, CreateDatabaseCommand} = require('@aws-sdk/client-timestream-write');
 
 const client = new TimestreamWriteClient({region: 'us-east-1'});
 

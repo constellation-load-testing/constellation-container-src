@@ -1,8 +1,6 @@
 const knex = require('knex');
-const configCache = require('./knexfile-cache');
+const config = require('./knexfile');
 const env = 'default'
-const connectionToCache = knex(configCache[env]);
+const connection = knex(config[env]);
 
-module.exports = {
-  connectionToCache
-};
+module.exports = connection
