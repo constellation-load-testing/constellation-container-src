@@ -1,40 +1,40 @@
 // create express app
 const express = require("express");
 const app = express();
-const bodyParser = require("body-parser");
 const cors = require("cors");
-const db = require("./db/dbfunctions/db.js");
+const body = require("body-parser");
 
-let timestamp = require("./utils/timestamp");
-let objectToSend = require("./utils/objectToSend");
+let timestamp = require("./data/timestamp");
+const objectToSend = require("./data/objectToSend").objectToSend;
+
+const defaultObj = require("./data/defaultObj");
+const sendObjToDb = require("./services/sendObjToDb");
+
 const createTimestampIfUndefined = require("./utils/createTimestamp.js");
+const reqObjectParser = require("./utils/reqObjectParser");
 
 app.use(cors());
-app.use(bodyParser.json());
+app.use(body.json());
 
 app.post("/test", async (req, res) => {
   try {
     timestamp = createTimestampIfUndefined(timestamp);
-    objectToSend[Date.now()] = req.body;
-    console.log(timestamp)
+    console.log(objectToSend)
+    reqObjectParser(req.body, objectToSend);
     if ((Date.now() - timestamp)/1000 >= 10) {
-      // send to SQLite
       timestamp = Date.now();
-      console.log(objectToSend)
-      await db.addByTableName('test', {data: JSON.stringify(objectToSend)})
-      objectToSend = {};
+      sendObjToDb(objectToSend);
     }
     res.status(200).send("success");
-
   } catch (e) {
     res.status(500).send(JSON.stringify(e));
   } 
 })
 
-app.get("/test", async (req, res) => {
-  const data = await db.getByTableName('test');
-  res.json({message: data});
-});
+// app.get("/test", async (req, res) => {
+//   const data = await db.getByTableName('test');
+//   res.json({message: data});
+// });
 
 // listen for requests
 app.listen(3000, () => {
