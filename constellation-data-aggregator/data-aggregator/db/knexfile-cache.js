@@ -10,7 +10,7 @@ module.exports = {
     client: 'sqlite3',
     connection: {
       // filename: './dev.sqlite3',
-      filename: path.resolve(__dirname, 'dev.sqlite3'),
+      filename: path.resolve(__dirname, 'cache.sqlite3'),
     },
     useNullAsDefault: true,
   },
