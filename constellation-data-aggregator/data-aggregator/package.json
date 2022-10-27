@@ -1,0 +1,24 @@
+{
+  "dependencies": {
+    "@aws-sdk/client-timestream-write": "^3.197.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "knex": "^2.3.0",
+    "sqlite3": "^5.1.2"
+  },
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "knex": "knex --knexfile ./db/knexfile.js",
+    "migrate": "npm run knex migrate:latest",
+    "rollback": "npm run knex migrate:rollback",
+    "seed": "npm run knex seed:run",
+    "database:init": "npm run rollback && npm run migrate && npm run seed",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
