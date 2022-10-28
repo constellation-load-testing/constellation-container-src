@@ -1,6 +1,7 @@
 const resetObjectToSend = require("./resetObjectToSend");
 function createAggregateObject(dataArr) {
   const aggregateObject = resetObjectToSend();
+  console.log(aggregateObject)
   dataArr.forEach( objectToAggregate => {
     aggregateObject.totalRequests += objectToAggregate.totalRequests;
     aggregateObject.totalErrors += objectToAggregate.totalErrors;
