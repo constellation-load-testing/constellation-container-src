@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@aws-sdk/client-timestream-write": "^3.197.0",
+    "concurrently": "^7.5.0",
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "knex": "^2.3.0",
@@ -9,12 +10,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start:receiver": "npm run database:init && node index.js",
+    "start:aggregator": "node aggregateToTimestream.js",
+    "start": "concurrently npm:start:*",
     "knex": "knex --knexfile ./db/knexfile.js",
     "migrate": "npm run knex migrate:latest",
     "rollback": "npm run knex migrate:rollback",
     "seed": "npm run knex seed:run",
-    "database:init": "npm run rollback && npm run migrate && npm run seed",
+    "database:init": "npm run migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

@@ -5,6 +5,7 @@
  exports.up = function(knex) {
   return knex.schema.createTable('permanent', function(table) {
     table.increments('id');
+    table.integer("timestamp");
     table.string('data');
   })
 };
