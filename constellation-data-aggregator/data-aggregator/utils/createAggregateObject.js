@@ -3,10 +3,12 @@ function createAggregateObject(dataArr) {
   const aggregateObject = resetObjectToSend();
   console.log(aggregateObject)
   dataArr.forEach( objectToAggregate => {
-    aggregateObject.totalRequests += objectToAggregate.totalRequests;
-    aggregateObject.totalErrors += objectToAggregate.totalErrors;
-    aggregateObject.totalTests += objectToAggregate.totalTests;
-    aggregateObject.totalRuntime += objectToAggregate.totalRuntime;
+		console.log(objectToAggregate.data)
+		data = JSON.parse(objectToAggregate.data)
+    aggregateObject.totalRequests += data.totalRequests;
+    aggregateObject.totalErrors += data.totalErrors;
+    aggregateObject.totalTests += data.totalTests;
+    aggregateObject.totalRuntime += data.totalRuntime;
     aggregateObject.averageRuntime = aggregateObject.totalRuntime / aggregateObject.totalTests;
   });
   return aggregateObject;

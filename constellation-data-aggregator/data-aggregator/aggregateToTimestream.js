@@ -10,9 +10,8 @@ setInterval(async () => {
     await emptyCache()
     const aggregateObject = createAggregateObject(dataArr);
     console.log(aggregateObject)
-    // writeToTimeStream()
-    // send aggregate object to timestream
+    writeToTimeStream(aggregateObject);
   } catch (e) {
     console.log(e);
   }
-}, 2000);
+}, 5000);

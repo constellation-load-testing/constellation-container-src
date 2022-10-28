@@ -4,15 +4,31 @@ const client = new TimestreamWriteClient({region: 'us-east-1'});
 
 async function writeToTimeStream(input) {
 	try {
-    const command = new WriteRecordsCommand({
-      DatabaseName: 'test',
-      TableName: 'test',
-    });
-    const data = await client.send(command);
-    console.log(data);
-  } catch (err) {
-    console.error(err);
-  }
+		const params = {
+			DatabaseName: 'test',
+			TableName: 'test',
+			Records: [
+				{
+					Dimensions: [
+						{
+							Name: 'test',
+							Value: 'test'
+						}
+					],
+					MeasureName: 'ten second average',
+					MeasureValue: JSON.stringify(input),
+					MeasureValueType: 'VARCHAR',
+					Time: `${Date.now()}`,
+					TimeUnit: 'MILLISECONDS'
+				},
+			]
+		};
+		const command = new WriteRecordsCommand(params);
+		const response = await client.send(command);
+		console.log(response);
+	} catch (err) {
+		console.error(err);
+	}
 }
 
 module.exports = writeToTimeStream;
