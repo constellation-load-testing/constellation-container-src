@@ -1,44 +1,66 @@
-"use strict";
+'use strict';
 
-import { options } from '../test_script/test_script.js';
+import 'dotenv/config';
+import axios from 'axios';
 
-import childProcess from 'child_process';
-const CHILD_PROCESSES = options.vus;
+const TARGET = process.env.TARGET;
+const VU_COUNT = process.env.VUS;
+const DURATION = process.env.DURATION;
+let testRunning = true;
+
+setTimeout(() => {
+  testRunning = false;
+}, DURATION);
 
 (async () => {
-  let times = [];
-  let children = [];
-
-  for (let i = 0; i < CHILD_PROCESSES; i++) {
-    let child = childProcess.spawn("node", ["child.js"]);
-    children.push(child);
-  }
-
-  let responses = children.map(function wait(child) {
-    return new Promise(function c(res) {
-      child.stdout.on('data', (data) => {
-        times.push(parseInt(data));
-      });
-      child.on("exit", function (code) {
-        if (code === 0) {
-          res(true);
-        } else {
-          res(false);
-        }
-      })
-    });
+  axios.interceptors.request.use(config => {
+    config.metadata = { startTime: Date.now() };
+    return config;
+  }, error => {
+    return Promise.reject(error);
   });
 
-  responses = await Promise.all(responses);
+  axios.interceptors.response.use(response => {
+    const startTime = response.config.metadata.startTime;
+    const endTime = Date.now();
 
-  if (responses.filter(Boolean).length === responses.length) {
-    const sum = times.reduce((a, b) => a + b, 0);
-    const avg = (sum / times.length) || 0;
-    console.log(times);
-    console.log(`average: ${avg}`);
-    console.log("success!");
-  } else {
-    console.log("failures!");
+    response.config.metadata.endTime = endTime;
+    response.duration = endTime - startTime;
+    return response;
+  }, error => {
+    return Promise.reject(error);
+  });
+
+  const promises = [];
+  const responses = [];
+  const promiseGenerator = (TARGET) => {
+
+    return axios.post(TARGET, { timeStamp: Date.now() })
+                .then(async (response) => {
+                  responses.push(response);
+
+                  await new Promise((resolve) => {
+                    setTimeout(resolve, 1000);
+                  });
+
+                  if (testRunning){
+                    return promiseGenerator(TARGET);
+                  }
+                });
   }
+
+  for (let i = 0; i < VU_COUNT; i++) {
+    const promise = promiseGenerator(TARGET);
+    promises.push(promise);
+  }
+
+  Promise.all(promises).then((results) => {
+    const sum = responses.map(response => response.duration)
+      .reduce((a, b) => a + b, 0);
+    const avg = (sum / responses.length) || 0;
+    console.log({ responses: responses.length });
+    console.log(responses.map(response => response.duration))
+    console.log({ avg });
+  });
 })();
 
