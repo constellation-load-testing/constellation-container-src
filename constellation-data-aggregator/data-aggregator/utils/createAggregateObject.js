@@ -9,7 +9,7 @@ function createAggregateObject(dataArr) {
     aggregateObject.totalErrors += data.totalErrors;
     aggregateObject.totalTests += data.totalTests;
     aggregateObject.totalRuntime += data.totalRuntime;
-    aggregateObject.averageRuntime = aggregateObject.totalRuntime / aggregateObject.totalTests;
+    aggregateObject.averageTestLatency = aggregateObject.totalRuntime / aggregateObject.totalTests;
   });
   return aggregateObject;
 }

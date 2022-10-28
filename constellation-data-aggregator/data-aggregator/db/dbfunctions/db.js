@@ -19,6 +19,13 @@ function getCache(db = connection) {
   return db('cache').select();
 }
 
+// get all items between timeduration given timestamp
+function getItemsBetweenTimeDurationInCache(timestamp, timeDuration, db = connection) {
+  return db('cache')
+    .select()
+    .where('timestamp', '>', timestamp - timeDuration);
+}
+
 // write to the cache <-- hit for all the inbound requests
 function setCache(data, db = connection) {
   return db('cache').insert(data);
