@@ -5,7 +5,7 @@ const client = new TimestreamWriteClient({region: 'us-east-1'});
 async function writeToTimeStream(input) {
 	try {
 		const params = {
-			DatabaseName: '',
+			DatabaseName: 'constellation-timestream-db',
 			TableName: 'aggregation-table',
 			Records: [
 				{

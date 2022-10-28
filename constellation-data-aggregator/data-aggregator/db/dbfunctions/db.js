@@ -20,10 +20,19 @@ function getCache(db = connection) {
 }
 
 // get all items between timeduration given timestamp
-function getItemsBetweenTimeDurationInCache(timestamp, timeDuration, db = connection) {
+function getItemsBetweenTimeDurationInCache(currentTime, n, db = connection) {
   return db('cache')
+    .where('timestamp', '>=', currentTime - 2*n)
+    .andWhere('timestamp', '<', currentTime - n) 
     .select()
-    .where('timestamp', '>', timestamp - timeDuration);
+    //<--- timestamp <= currentTime - n record(s) are ignored
+}
+
+// delete from specified time
+function deleteItemsBeforeTimeDurationInCache(currentTime, n, db = connection) {
+  return db('cache')
+    .where('timestamp', '<', currentTime - 2*n)
+    .delete()
 }
 
 // write to the cache <-- hit for all the inbound requests
@@ -63,4 +72,6 @@ module.exports = {
   emptyPermanent,
   getPermanent,
   setPermanent,
+  getItemsBetweenTimeDurationInCache,
+  deleteItemsBeforeTimeDurationInCache,
 }

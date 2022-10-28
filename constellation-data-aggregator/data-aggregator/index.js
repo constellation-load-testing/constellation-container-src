@@ -19,9 +19,7 @@ app.use(body.json());
 app.post("/test", async (req, res) => {
   try {
     let objectToSend = resetObjectToSend();
-    timestamp = createTimestampIfUndefined(timestamp);
     reqObjectParser(req.body, objectToSend);
-    timestamp = Date.now();
     await sendObjToDb(objectToSend);
     res.status(200).send("success");
   } catch (e) {

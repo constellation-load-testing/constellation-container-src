@@ -10,14 +10,14 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start:receiver": "node index.js",
+    "start:receiver": "npm run database:init && node index.js",
     "start:aggregator": "node aggregateToTimestream.js",
     "start": "concurrently npm:start:*",
     "knex": "knex --knexfile ./db/knexfile.js",
     "migrate": "npm run knex migrate:latest",
     "rollback": "npm run knex migrate:rollback",
     "seed": "npm run knex seed:run",
-    "database:init": "npm run rollback && npm run migrate && npm run seed",
+    "database:init": "npm run migrate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
