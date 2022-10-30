@@ -4,33 +4,45 @@ import 'dotenv/config';
 import axios from 'axios'
 
 import setInterceptors from './services/setInterceptors.js';
-import test_script, { options } from '../test_script/test_script.js';
+import { options } from '../test_script/test_script.js';
 
-// const TARGET = process.env.TARGET;
+const call = options.call;
 const VU_COUNT = options.vus;
 const DURATION = options.duration;
 
+const OUTPUT = "http://localhost:5000/log";
+const BUFFER_TIME = 4000;
+
 let testRunning = true;
+
+const testAxios = axios.create();
+const logAxios = axios.create();
 
 setTimeout(() => {
   testRunning = false;
 }, DURATION);
 
 (async () => {
-  const results = {};
-  setInterceptors(axios);
+  const testID = 0;
+  const startTime = Date.now();
+  let results = [];
+  setInterceptors(testAxios, results);
 
-  let tests = 0;
+  const testReporter = setInterval(() => {
+    const test = {
+      [testID]: {
+        runtime: Date.now() - startTime,
+        calls: results
+      }
+    }
+
+    logAxios.post(OUTPUT, test);
+    results.length = 0;
+  }, BUFFER_TIME);
+
   const promises = [];
   const promiseGenerator = () => {
-    const currentTest = tests;
-    tests++
-    const startTime = Date.now();
-
-    return test_script(axios).then(async () => {
-      const endTime = Date.now();
-      results[currentTest] = { runtime: endTime - startTime };
-
+    return call(testAxios).then(async () => {
       if (testRunning){
         return promiseGenerator();
       }
@@ -43,13 +55,15 @@ setTimeout(() => {
   }
 
   Promise.all(promises).then(() => {
-    console.log(results);
-    // const sum = responses.map(response => response.duration)
-    //   .reduce((a, b) => a + b, 0);
-    // const avg = (sum / responses.length) || 0;
-    // console.log({ responses: responses.length });
-    // console.log(responses.map(response => response.duration))
-    // console.log({ avg });
+    const test = {
+      [testID]: {
+        runtime: Date.now() - startTime,
+        calls: results
+      }
+    }
+
+    logAxios.post(OUTPUT, test);
+    clearInterval(testReporter);
   });
 })();
 
@@ -63,3 +77,4 @@ testID: {
   ]
 }
 */
+
