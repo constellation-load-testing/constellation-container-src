@@ -1,3 +1,5 @@
+'use strict';
+
 let callCounter = 0;
 
 const setInterceptors = (axios, results) => {

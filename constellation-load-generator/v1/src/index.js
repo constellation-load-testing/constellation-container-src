@@ -10,7 +10,7 @@ const call = options.call;
 const VU_COUNT = options.vus;
 const DURATION = options.duration;
 
-const OUTPUT = "http://localhost:5000/log";
+const OUTPUT = process.env.OUTPUT;
 const BUFFER_TIME = 4000;
 
 let testRunning = true;
