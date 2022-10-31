@@ -1,7 +1,7 @@
 function updateErrorAndRequests (test, objectToSend) {
   test.calls.forEach( call => {
     objectToSend.totalRequests++;
-    if (call.response.statusCode >= 400) {
+    if (call.response.status >= 400) {
       objectToSend.totalErrors++;
     }
   });

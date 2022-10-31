@@ -8,9 +8,9 @@ const sleep = async (ms) => {
 
 export const options = {
   vus: 2,
-  duration: 10000,
+  duration: 500000,
   async call(axios) {
-    await axios.post("http://localhost:5000/target", { timeStamp: Date.now() });
+		await axios.post("http://localhost:5000/", { timeStamp: Date.now() });
     await sleep(1000);
   }
 }
