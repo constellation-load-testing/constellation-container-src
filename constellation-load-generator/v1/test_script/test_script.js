@@ -1,16 +1,15 @@
 'use strict';
 
-const sleep = async (ms) => {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
+import { sleep } from "../src/utils/sleep.js";
 
 export const options = {
-  vus: 2,
+  vus: 200,
   duration: 10000,
-  async call(axios) {
-    await axios.post("http://localhost:5000/target", { timeStamp: Date.now() });
+  async test(axiosInstance) {
+    await axiosInstance.post(
+      "http://localhost:5000/target",
+      { timeStamp: Date.now() }
+    );
     await sleep(1000);
   }
 }
