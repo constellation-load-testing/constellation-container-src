@@ -2,6 +2,12 @@
 
 let callCounter = 0;
 
+/**
+ * Assigns the axios interceptor functions to given axios instance
+ *
+ * @param {AxiosInstance} axios
+ * @param {array} results
+ */
 const setInterceptors = (axios, results) => {
   axios.interceptors.request.use(config => {
     const { headers, method, url, data } = config;
@@ -37,16 +43,5 @@ const setInterceptors = (axios, results) => {
     return Promise.reject(error);
   });
 };
-
-/*
-testID: {
-  runtime: int,
-  calls: [
-    { callID: int, request: request, response: response, latency: int },
-    ...
-  ]
-}
-*/
-
 
 export default setInterceptors;
