@@ -1,5 +1,6 @@
 const resetObjectToSend = require("./resetObjectToSend");
-function createAggregateObject(dataArr) {
+const region = process.argv[process.argv.length - 1]
+function createAggregateObject(dataArr, region) {
   const aggregateObject = resetObjectToSend();
   dataArr.forEach( objectToAggregate => {
 		data = JSON.parse(objectToAggregate.data)
@@ -7,9 +8,14 @@ function createAggregateObject(dataArr) {
     aggregateObject.totalErrors += data.totalErrors;
     aggregateObject.totalTests += data.totalTests;
     aggregateObject.totalRuntime += data.totalRuntime;
-    aggregateObject.averageTestLatency = aggregateObject.totalRuntime / aggregateObject.totalTests;
+		aggregateObject.totalCallRuntime += data.totalCallRuntime;
+		aggregateObject.totalRequests += data.totalRequests;
+		aggregateObject.averageCallLatency = aggregateObject.totalCallRuntime / aggregateObject.totalRequests;
+    // aggregateObject.averageTestLatency = aggregateObject.totalRuntime / aggregateObject.totalTests;
   });
-  return aggregateObject;
+	const returnObject = {}
+	returnObject[region] = aggregateObject
+	return returnObject
 }
 
 module.exports = createAggregateObject;

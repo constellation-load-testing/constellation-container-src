@@ -11,6 +11,7 @@ const VU_COUNT = options.vus;
 const DURATION = options.duration;
 
 const OUTPUT = process.env.OUTPUT;
+console.log(OUTPUT);
 const BUFFER_TIME = 4000;
 
 const testID = 0;
