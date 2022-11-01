@@ -4,8 +4,7 @@ function resetObjectToSend() {
     totalErrors: 0,
     totalTests: 0,
     totalRuntime: 0,
-    averageTestLatency: 0,
-		totalCallRuntime: 0,
+    averageTestLatency: 0
   };
 }
 

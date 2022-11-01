@@ -1,4 +1,4 @@
-function fillErrorAndRequests (test, objectToSend) {
+function updateErrorAndRequests (test, objectToSend) {
   test.calls.forEach( call => {
     objectToSend.totalRequests++;
     if (call.response.status >= 400) {
@@ -7,4 +7,4 @@ function fillErrorAndRequests (test, objectToSend) {
   });
 }
 
-module.exports = fillErrorAndRequests;
+module.exports = updateErrorAndRequests;

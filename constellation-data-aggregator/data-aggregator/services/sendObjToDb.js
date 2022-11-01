@@ -1,5 +1,5 @@
 const db = require('../db/dbfunctions/db');
-async function sendObjToSQLite(objectToSend) {
+async function sendObjToDb(objectToSend) {
   try {
     await db.addByTableName('cache', { 
       timestamp: Date.now(),
@@ -10,4 +10,4 @@ async function sendObjToSQLite(objectToSend) {
   }
 }
 
-module.exports = sendObjToSQLite;
+module.exports = sendObjToDb;

@@ -11,7 +11,7 @@
   "main": "index.js",
   "scripts": {
     "start:receiver": "npm run database:init && node index.js",
-    "start:aggregator": "node aggregateToTimestream.js us-east-2",
+    "start:aggregator": "node aggregateToTimestream.js",
     "start": "concurrently npm:start:*",
     "knex": "knex --knexfile ./db/knexfile.js",
     "migrate": "npm run knex migrate:latest",
