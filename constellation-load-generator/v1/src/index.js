@@ -53,8 +53,11 @@ const startLogger = () => {
 /**
  * Runs the test defined in the test script using the testAxios client and
  * upon test resolution repeats that test so long as testRunning is true
+ *
+ * @param {AxiosInstance} userAxios
+ * @returns promise to be tracked for final log when settled
  */
-const runTest = () => {
+const runTest = (userAxios) => {
   const currentTestID = testID;
   testID++;
 
@@ -64,15 +67,16 @@ const runTest = () => {
     calls: [],
   }
 
-  const testAxios = axios.create();
-  setInterceptors(testAxios, test.calls);
+  const clearInterceptors = setInterceptors(userAxios, test.calls);
 
-  return script(testAxios).finally(async () => {
+  return script(userAxios).finally(async () => {
     test.runtime = Date.now() - test.startTime;
     results.push(test);
 
+    clearInterceptors();
+
     if (testRunning){
-      return runTest();
+      return runTest(userAxios);
     }
   });
 }
@@ -86,7 +90,8 @@ const start = async () => {
 
   const promises = [];
   for (let i = 0; i < VU_COUNT; i++) {
-    const promise = runTest();
+    const userAxios = axios.create();
+    const promise = runTest(userAxios);
     promises.push(promise);
   }
 

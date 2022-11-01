@@ -27,9 +27,10 @@ const processResponse = (response) => {
  *
  * @param {AxiosInstance} axios
  * @param {array} calls
+ * @returns function to remove interceptors from axios instance
  */
 const setInterceptors = (axios, calls) => {
-  axios.interceptors.request.use(config => {
+  const requestInterceptor = axios.interceptors.request.use(config => {
     const { headers, method, url, data } = config;
     config.metadata = {
       callID: callCounter,
@@ -44,13 +45,20 @@ const setInterceptors = (axios, calls) => {
     return Promise.reject(error);
   });
 
-  axios.interceptors.response.use(response => {
+  const responseInterceptor = axios.interceptors.response.use(response => {
     calls.push(processResponse(response));
     return response;
   }, error => {
     calls.push(processResponse(error.response));
     return error;
   });
+
+  const clearInterceptors = () => {
+    axios.interceptors.request.eject(requestInterceptor);
+    axios.interceptors.response.eject(responseInterceptor);
+  };
+
+  return clearInterceptors;
 };
 
 export default setInterceptors;

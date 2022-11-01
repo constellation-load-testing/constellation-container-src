@@ -3,8 +3,8 @@
 import { sleep } from "../src/utils/sleep.js";
 
 export const options = {
-  vus: 200,
-  duration: 60000,
+  vus: 1,
+  duration: 15000,
   async script(axiosInstance) {
     await axiosInstance.post(
       "http://localhost:5000/target",
