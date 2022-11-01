@@ -1,7 +1,5 @@
 'use strict';
 
-let callCounter = 0;
-
 /**
  * Gets data from axios metadata and response to construct the call log
  *
@@ -30,6 +28,8 @@ const processResponse = (response) => {
  * @returns function to remove interceptors from axios instance
  */
 const setInterceptors = (axios, calls) => {
+  let callCounter = 0;
+
   const requestInterceptor = axios.interceptors.request.use(config => {
     const { headers, method, url, data } = config;
     config.metadata = {
