@@ -6,44 +6,25 @@ import axios from 'axios'
 import setInterceptors from './services/setInterceptors.js';
 import { options } from '../test_script/test_script.js';
 
-const test = options.test;
+const script = options.script;
 const VU_COUNT = options.vus;
 const DURATION = options.duration;
 
 const OUTPUT = process.env.OUTPUT;
-const BUFFER_TIME = 4000;
+const BUFFER_TIME = 10000;
 
-const testID = 0;
-const startTime = Date.now();
-const results = [];
+let testID = 0;
 let testRunning = true;
+const results = [];
 
-const testAxios = axios.create();
 const logAxios = axios.create();
-setInterceptors(testAxios, results);
-
-/**
- * Formats the buffered results to be sent to the output
- *
- * @returns results object formatted for the output
- */
-const formatResults = () => {
-  const currentTime = Date.now();
-
-  return {
-    [testID]: {
-      runtime: currentTime - startTime,
-      calls: results
-    }
-  }
-}
 
 /**
  * Sends the formatted results to the output and empties the results buffer
  */
-const formatAndLogResults = () => {
+const logAndClearResults = () => {
   try {
-    logAxios.post(OUTPUT, formatResults());
+    logAxios.post(OUTPUT, results);
     results.length = 0;
   } catch (e) {
     console.error(e);
@@ -65,7 +46,7 @@ const startTimer = () => {
  */
 const startLogger = () => {
   return setInterval(() => {
-    formatAndLogResults();
+    logAndClearResults();
   }, BUFFER_TIME);
 }
 
@@ -74,7 +55,22 @@ const startLogger = () => {
  * upon test resolution repeats that test so long as testRunning is true
  */
 const runTest = () => {
-  return test(testAxios).then(async () => {
+  const currentTestID = testID;
+  testID++;
+
+  const test = {
+    testID: currentTestID,
+    startTime: Date.now(),
+    calls: [],
+  }
+
+  const testAxios = axios.create();
+  setInterceptors(testAxios, test.calls);
+
+  return script(testAxios).finally(async () => {
+    test.runtime = Date.now() - test.startTime;
+    results.push(test);
+
     if (testRunning){
       return runTest();
     }
@@ -95,7 +91,7 @@ const start = async () => {
   }
 
   Promise.all(promises).then(() => {
-    formatAndLogResults();
+    logAndClearResults();
     clearInterval(testLogger);
   });
 };
