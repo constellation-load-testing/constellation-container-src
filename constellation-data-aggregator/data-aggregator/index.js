@@ -4,28 +4,29 @@ const app = express();
 const cors = require('cors');
 const body = require("body-parser");
 
-const sendObjToSQLite = require('./services/sendObjToSQLite');
+let timestamp = require("./data/timestamp");
 
+const sendObjToDb = require("./services/sendObjToDb");
+
+const reqObjectParser = require("./utils/reqObjectParser");
 const resetObjectToSend = require("./utils/resetObjectToSend");
-const fillObjectToSend = require("./utils/fillObjectToSend");
 
 app.use(cors());
 app.use(body.json());
 
-app.post("/aggregator", async (req, res) => {
+app.post("/test", async (req, res) => {
+	console.log(req.body['0']);
   try {
     let objectToSend = resetObjectToSend();
-		const data = req.body[Object.keys(req.body)[0]];
-		console.log(data)
-    fillObjectToSend(data, objectToSend)
-    await sendObjToSQLite(objectToSend);
+    reqObjectParser(req.body, objectToSend);
+    await sendObjToDb(objectToSend);
     res.status(200).send("success");
   } catch (e) {
     res.status(500).send(JSON.stringify(e));
   }
 })
 
-app.listen(3003, () => {
-  console.log(`Server is listening on port 3003`);
+app.listen(3000, () => {
+  console.log("Server is listening on port 3000");
 })
 
