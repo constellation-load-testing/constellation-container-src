@@ -2,7 +2,7 @@ const {TimestreamWriteClient, WriteRecordsCommand} = require("@aws-sdk/client-ti
 
 async function writeToTimeStream(input, region) {
 	try {
-		const client = new TimestreamWriteClient({region: 'us-east-1'});
+		const client = new TimestreamWriteClient({region: 'us-west-2'});
 		console.log(typeof region)
 		const params = {
 			DatabaseName: 'constellation-timestream-db',
