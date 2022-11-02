@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "aws-sdk": "^2.1244.0",
     "@aws-sdk/client-timestream-write": "^3.197.0",
     "concurrently": "^7.5.0",
     "cors": "^2.8.5",
@@ -11,8 +12,8 @@
   "main": "index.js",
   "scripts": {
     "start:receiver": "npm run database:init && node index.js",
-    "start:aggregator": "node aggregateToTimestream.js us-east-2",
-    "start": "concurrently npm:start:*",
+    "start:aggregator": "node aggregateToTimestream.js",
+    "start": "node ./processes/init-agg.js && concurrently npm:start:*",
     "knex": "knex --knexfile ./db/knexfile.js",
     "migrate": "npm run knex migrate:latest",
     "rollback": "npm run knex migrate:rollback",
