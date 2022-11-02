@@ -26,7 +26,7 @@ const LineGraph = (data, region, index) => {
 		responsive: true,
 		plugins: {
 			legend: {
-				position: 'top',
+				position: 'bottom',
 			},
 			title: {
 				display: true,

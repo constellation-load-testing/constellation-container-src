@@ -27,7 +27,11 @@ function App() {
 		<div className="App">
 			<div>
 				{!data ? null : data.regions.map((region, index) => {
-					return LineGraph(data, region, index);
+					return (
+						<div key={index} style={{padding: 50, width: 600, display: 'inline-block'}} >
+						{LineGraph(data, region, index)}
+					</div>
+					)
 				})}
 				{console.log(data)}
 			</div>
