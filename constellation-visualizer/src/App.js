@@ -9,7 +9,7 @@ function App() {
 
 	useEffect(() => {
 		(async () => {
-			const result = await axios.get('http://localhost:3002/');
+			const result = await axios.get('http://localhost:3002/data');
 			setData(result.data);
 			console.log(result.data);
 		})();

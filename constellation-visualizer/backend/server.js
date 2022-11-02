@@ -8,7 +8,7 @@ const {TimestreamQueryClient, QueryCommand} = require("@aws-sdk/client-timestrea
 const {TimestreamWriteClient, ListTablesCommand} = require("@aws-sdk/client-timestream-write");
 const writeClient = new TimestreamWriteClient({region: "us-east-1"});
 const queryClient = new TimestreamQueryClient({region: "us-east-1"});
-
+app.use(express.static(__dirname.concat('/build')));
 // takes in a list of region tables and returns an object with all the formated data from each table
 // this is then sent to the frontend to be displayed
 async function writeData(regions) {
@@ -31,9 +31,13 @@ async function writeData(regions) {
 	return regionObject
 }
 
+// server static files
+app.get('/', (req, res) => {
+	res.sendFile('../build/index.html');
+});
 
 // create a GET route
-app.get('/', async (req, res) => {
+app.get('/data', async (req, res) => {
 	const params = {
 		DatabaseName: "constellation-timestream-db",
 	};
