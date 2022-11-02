@@ -4,11 +4,11 @@ import 'dotenv/config';
 import axios from 'axios'
 
 import setInterceptors from './services/setInterceptors.js';
-import { options } from '../test_script/test_script.js';
+import { config } from './test_config.js';
 
-const script = options.script;
-const VU_COUNT = options.vus;
-const DURATION = options.duration;
+const script = config.script;
+const VU_COUNT = config.vus;
+const DURATION = config.duration;
 
 const OUTPUT = process.env.OUTPUT;
 const BUFFER_TIME = 10000;
@@ -22,10 +22,13 @@ const logAxios = axios.create();
 /**
  * Sends the formatted results to the output and empties the results buffer
  */
-const logAndClearResults = () => {
+const logAndClearResults = async () => {
   try {
-    logAxios.post(OUTPUT, results);
+    console.log(`Sending ${results.length} tests to ${OUTPUT}...`);
+    await logAxios.post(OUTPUT, results);
     results.length = 0;
+
+    console.log("Log sent, buffer cleared");
   } catch (e) {
     console.error(e);
   }
@@ -57,7 +60,7 @@ const startLogger = () => {
  * @param {AxiosInstance} userAxios
  * @returns promise to be tracked for final log when settled
  */
-const runTest = (userAxios) => {
+ const runTest = (userAxios) => {
   const currentTestID = testID;
   testID++;
 
@@ -84,7 +87,7 @@ const runTest = (userAxios) => {
 /**
  * Starts the test
  */
-const start = async () => {
+const startTest = async () => {
   startTimer();
   const testLogger = startLogger();
 
@@ -98,7 +101,8 @@ const start = async () => {
   Promise.all(promises).then(() => {
     logAndClearResults();
     clearInterval(testLogger);
+    console.log("Test Series Complete");
   });
 };
 
-start();
+startTest();
