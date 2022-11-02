@@ -11,7 +11,7 @@ let counter = 0;
 let bool = false;
 
 function intervalSendToTimestream() {
-	const region = process.argv[process.argv.length - 1];
+	const region = process.env.REGION;
 	const aggInterval = setInterval(async () => {
 		try {
 			console.log("yup")

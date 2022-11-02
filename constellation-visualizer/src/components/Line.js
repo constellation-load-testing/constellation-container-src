@@ -21,7 +21,7 @@ ChartJS.register(
 );
 
 
-const LineGraph = (input) => {
+const LineGraph = (data, region, index) => {
 	const options = {
 		responsive: true,
 		plugins: {
@@ -30,16 +30,15 @@ const LineGraph = (input) => {
 			},
 			title: {
 				display: true,
-				text: 'Region',
+				text: region,
 			},
 		},
 	};
-	const labels = input.map(d => d.time);
-	const averageLatency = input.map(d => d.averageLatency);
-	const errorRate = input.map(d => d.totalErrors);
-	console.log(errorRate);
-	const year = input[0] ? input[0].year : 'undefined';
-	const data = {
+	const labels = data[region].map(d => d.time);
+	const averageLatency = data[region].map(d => d.averageLatency);
+	const errorRate = data[region].map(d => d.totalErrors);
+	const year = data[0] ? data[0].year : 'undefined';
+	const graphData = {
 		labels,
 		datasets: [
 			{
@@ -56,6 +55,6 @@ const LineGraph = (input) => {
 			}
 		],
 	};
-	return <Line options={options} data={data} />;
+	return <Line options={options} data={graphData} />;
 }
 export default LineGraph;

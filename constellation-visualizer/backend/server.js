@@ -22,8 +22,8 @@ async function writeData(regions) {
 			return {
 				"year": year,
 				"time": time.split('.')[0],
-				"averageLatency": JSON.parse(row.Data[3].ScalarValue).averageCallLatency,
-				"totalErrors": JSON.parse(row.Data[3].ScalarValue).totalErrors
+				"averageLatency": JSON.parse(row.Data[3].ScalarValue)[region].averageCallLatency,
+				"totalErrors": JSON.parse(row.Data[3].ScalarValue)[region].totalErrors
 			}
 		});
 		regionObject[region] = formatedResponse
