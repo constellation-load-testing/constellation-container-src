@@ -3,6 +3,7 @@ const region = process.argv[process.argv.length - 1]
 function createAggregateObject(dataArr, region) {
   const aggregateObject = resetObjectToSend();
   dataArr.forEach( objectToAggregate => {
+		console.log(objectToAggregate)
 		data = JSON.parse(objectToAggregate.data)
     aggregateObject.totalRequests += data.totalRequests;
     aggregateObject.totalErrors += data.totalErrors;

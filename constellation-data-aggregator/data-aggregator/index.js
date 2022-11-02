@@ -7,7 +7,7 @@ const body = require("body-parser");
 const sendObjToSQLite = require('./services/sendObjToSQLite');
 
 const resetObjectToSend = require("./utils/resetObjectToSend");
-const fillObjectToSend = require("./utils/fillObjectToSend");
+const fillObjectFromArray = require("./utils/fillObjectFromArray");
 
 app.use(cors());
 app.use(body.json());
@@ -15,9 +15,8 @@ app.use(body.json());
 app.post("/aggregator", async (req, res) => {
   try {
     let objectToSend = resetObjectToSend();
-		const data = req.body[Object.keys(req.body)[0]];
-		console.log(data)
-    fillObjectToSend(data, objectToSend)
+		const data = req.body;
+    fillObjectFromArray(data, objectToSend)
     await sendObjToSQLite(objectToSend);
     res.status(200).send("success");
   } catch (e) {
