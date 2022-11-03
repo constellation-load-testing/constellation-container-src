@@ -17,6 +17,7 @@
     "knex": "knex --knexfile ./db/knexfile.js",
     "migrate": "npm run knex migrate:latest",
     "rollback": "npm run knex migrate:rollback",
+    "core": "concurrently npm:start:*",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
