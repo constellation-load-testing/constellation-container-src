@@ -1,16 +1,16 @@
-'use strict';
+"use strict";
 
-import 'dotenv/config';
-import axios from 'axios'
+import "dotenv/config";
+import axios from "axios";
 
-import setInterceptors from './services/setInterceptors.js';
-import { config } from './test_config.js';
+import setInterceptors from "./services/setInterceptors.js";
+import { config } from "./test_config.js";
 
 const script = config.script;
 const VU_COUNT = config.vus;
 const DURATION = config.duration;
 
-const OUTPUT = process.env.OUTPUT;
+const OUTPUT = process.env.OUTPUT || "http://localhost:3003/aggregator";
 const BUFFER_TIME = 10000;
 
 let testID = 0;
@@ -32,7 +32,7 @@ const logAndClearResults = async () => {
   } catch (e) {
     console.error(e);
   }
-}
+};
 
 /**
  * Starts a timer for the duration of the test, sets testRunning to false upon
@@ -42,7 +42,7 @@ const startTimer = () => {
   setTimeout(() => {
     testRunning = false;
   }, DURATION);
-}
+};
 
 /**
  * Starts an interval to perform logging based on the buffer time
@@ -51,7 +51,7 @@ const startLogger = () => {
   return setInterval(() => {
     logAndClearResults();
   }, BUFFER_TIME);
-}
+};
 
 /**
  * Runs the test defined in the test script using the testAxios client and
@@ -60,7 +60,7 @@ const startLogger = () => {
  * @param {AxiosInstance} userAxios
  * @returns promise to be tracked for final log when settled
  */
- const runTest = (userAxios) => {
+const runTest = (userAxios) => {
   const currentTestID = testID;
   testID++;
 
@@ -68,7 +68,7 @@ const startLogger = () => {
     testID: currentTestID,
     startTime: Date.now(),
     calls: [],
-  }
+  };
 
   const clearInterceptors = setInterceptors(userAxios, test.calls);
 
@@ -78,11 +78,11 @@ const startLogger = () => {
 
     clearInterceptors();
 
-    if (testRunning){
+    if (testRunning) {
       return runTest(userAxios);
     }
   });
-}
+};
 
 /**
  * Starts the test
