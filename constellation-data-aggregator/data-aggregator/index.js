@@ -12,6 +12,11 @@ const fillObjectFromArray = require("./utils/fillObjectFromArray");
 app.use(cors());
 app.use(body.json({ limit: "10mb" }));
 
+app.get("/*", (req, res) => {
+  console.log("Health Check: GET request");
+  res.send("Health check OK");
+});
+
 app.post("/aggregator", async (req, res) => {
   try {
     let objectToSend = resetObjectToSend();
