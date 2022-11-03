@@ -18,6 +18,4 @@ const controlledDelayProcess = async (timestamp) => {
   }
 };
 
-module.exports = {
-  controlledDelayProcess,
-};
+export default controlledDelayProcess;

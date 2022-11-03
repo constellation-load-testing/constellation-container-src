@@ -4,8 +4,7 @@
  * 2. accomodate a process that maintains the container alive
  * 2.1 this process will send a signal to stop the container
  */
-require("dotenv").config();
-const { orchTestCompInvocation } = require("./utils/orch-test-comp-invocation");
+import orchTestCompInvocation from "./utils/orch-test-comp-invocation.js";
 const REGION = process.env.REGION || "us-east-1";
 const COMP_TEST_INITIAL_DELAY = 10000; // 10s
 

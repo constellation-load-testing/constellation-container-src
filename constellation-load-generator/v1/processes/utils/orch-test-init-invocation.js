@@ -2,9 +2,10 @@
  * this util file invokes the orchestrator lambda @ home region
  */
 
-const AWS = require("aws-sdk");
-const { getOrchestratorLambda } = require("./get-orch-lambda");
-const HOME_REGION = process.env.HOME_REGION || "us-west-2";
+import AWS from "aws-sdk";
+import getOrchestratorLambda from "./get-orch-lambda.js";
+
+const HOME_REGION = "us-west-2"; // predefined
 const REGION = process.env.REGION || "us-east-1";
 const lambda = new AWS.Lambda({
   region: HOME_REGION,
@@ -38,6 +39,4 @@ const orchTestInitInvocation = async () => {
   }
 };
 
-module.exports = {
-  orchTestInitInvocation,
-};
+export default orchTestInitInvocation;

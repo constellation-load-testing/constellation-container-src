@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /**
  * Gets data from axios metadata and response to construct the call log
@@ -14,11 +14,18 @@ const processResponse = (response) => {
   const latency = endTime - startTime;
   const { callID, request } = metadata;
 
-  const { status, statusText, headers, data } = response;
-  response = {status, statusText, headers, data};
+  let status, statusText, headers, data;
+  if (response.code === "ECONNREFUSED") {
+    status = response.errno;
+    statusText = response.code;
+  } else {
+    ({ status, statusText, headers, data } = response);
+  }
 
-  return { callID, request, response, latency }
-}
+  response = { status, statusText, headers, data };
+
+  return { callID, request, response, latency };
+};
 
 /**
  * Assigns the axios interceptor functions to given axios instance
@@ -30,28 +37,38 @@ const processResponse = (response) => {
 const setInterceptors = (axios, calls) => {
   let callCounter = 0;
 
-  const requestInterceptor = axios.interceptors.request.use(config => {
-    const { headers, method, url, data } = config;
-    config.metadata = {
-      callID: callCounter,
-      request: {headers, method, url, data},
-      startTime: Date.now(),
-      resultIndex: calls.length - 1
-    };
-    callCounter++;
+  const requestInterceptor = axios.interceptors.request.use(
+    (config) => {
+      const { headers, method, url, data } = config;
+      config.metadata = {
+        callID: callCounter,
+        request: { headers, method, url, data },
+        startTime: Date.now(),
+        resultIndex: calls.length - 1,
+      };
+      callCounter++;
 
-    return config;
-  }, error => {
-    return Promise.reject(error);
-  });
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
 
-  const responseInterceptor = axios.interceptors.response.use(response => {
-    calls.push(processResponse(response));
-    return response;
-  }, error => {
-    calls.push(processResponse(error.response));
-    return error;
-  });
+  const responseInterceptor = axios.interceptors.response.use(
+    (response) => {
+      calls.push(processResponse(response));
+      return response;
+    },
+    (error) => {
+      if (error.code === "ECONNREFUSED") {
+        calls.push(processResponse(error));
+      } else {
+        calls.push(processResponse(error.response));
+      }
+      return error;
+    }
+  );
 
   const clearInterceptors = () => {
     axios.interceptors.request.eject(requestInterceptor);

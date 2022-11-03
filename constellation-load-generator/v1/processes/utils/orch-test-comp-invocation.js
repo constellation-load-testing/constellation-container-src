@@ -1,5 +1,5 @@
-const AWS = require("aws-sdk");
-const { getOrchestratorLambda } = require("./get-orch-lambda");
+import AWS from "aws-sdk";
+import getOrchestratorLambda from "./get-orch-lambda.js";
 const HOME_REGION = "us-west-2"; // predefined
 const lambda = new AWS.Lambda({
   region: HOME_REGION,
@@ -27,6 +27,4 @@ const orchTestCompInvocation = async ({ region }) => {
   }
 };
 
-module.exports = {
-  orchTestCompInvocation,
-};
+export default orchTestCompInvocation;

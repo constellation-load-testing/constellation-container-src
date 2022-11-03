@@ -10,6 +10,4 @@ const validateOrchTestInitInvocation = (rawStringPayload) => {
   return false;
 };
 
-module.exports = {
-  validateOrchTestInitInvocation,
-};
+export default validateOrchTestInitInvocation;

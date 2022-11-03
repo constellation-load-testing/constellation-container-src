@@ -6,19 +6,16 @@
  * 4. Terminate init-process
  */
 
-// dotenv - get environment variables
-require("dotenv").config();
-const AWS = require("aws-sdk");
-const fs = require("fs").promises;
-const { poll } = require("./utils/poll");
-const { orchTestInitInvocation } = require("./utils/orch-test-init-invocation");
-const {
-  validateOrchTestInitInvocation,
-} = require("./utils/validate-orch-test-init-invocation");
-const { controlledDelayProcess } = require("./utils/controlled-delay-process");
+// const AWS = require("aws-sdk");
+import AWS from "aws-sdk";
+import fs from "fs/promises";
+import poll from "./utils/poll.js";
+import orchTestInitInvocation from "./utils/orch-test-init-invocation.js";
+import validateOrchTestInitInvocation from "./utils/validate-orch-test-init-invocation.js";
+import controlledDelayProcess from "./utils/controlled-delay-process.js";
 
 const HOME_REGION = "us-west-2"; // predetermined
-const BUCKET_NAME_KEYWORD = process.env.BUCKET_NAME_KEYWORD || "constellation";
+const BUCKET_NAME_KEYWORD = "constellation";
 
 const s3 = new AWS.S3({
   region: HOME_REGION,
