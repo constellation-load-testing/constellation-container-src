@@ -4,7 +4,7 @@
 
 const AWS = require("aws-sdk");
 const { getOrchestratorLambda } = require("./get-orch-lambda");
-const HOME_REGION = "us-west-2"; // predetermined
+const HOME_REGION = process.env.HOME_REGION; 
 
 const lambda = new AWS.Lambda({
   region: HOME_REGION,
