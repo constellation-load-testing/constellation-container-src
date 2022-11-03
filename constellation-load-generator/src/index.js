@@ -89,6 +89,7 @@ const runTest = (userAxios) => {
  * Starts the test
  */
 const startTest = async () => {
+  console.log("Test Series Started");
   startTimer();
   const testLogger = startLogger();
 
@@ -99,9 +100,9 @@ const startTest = async () => {
     promises.push(promise);
   }
 
-  Promise.all(promises).then(() => {
-    logAndClearResults();
+  Promise.all(promises).then(async () => {
     clearInterval(testLogger);
+    await logAndClearResults();
     console.log("Test Series Complete");
   });
 };
