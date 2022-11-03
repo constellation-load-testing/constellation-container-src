@@ -7,7 +7,7 @@ const controlledDelayProcess = async (timestamp) => {
   try {
     const now = new Date().getTime();
     const delay = timestamp - now;
-    console.log({ delay });
+    console.log(`The test will execute in: ${delay}ms`);
     if (delay <= 0) {
       // no delay if negative (not likely to happen)
       return;
