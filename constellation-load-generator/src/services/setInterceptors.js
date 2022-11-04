@@ -14,17 +14,18 @@ const processResponse = (response) => {
   const latency = endTime - startTime;
   const { callID, request } = metadata;
 
-  let status, statusText, headers, data;
+  let status, statusText, data;
   if (response.code === "ECONNREFUSED") {
     status = response.errno;
     statusText = response.code;
+    data = '';
   } else {
-    ({ status, statusText, headers, data } = response);
+    ({ status, statusText, data } = response);
   }
 
-  response = { status, statusText, headers, data };
+  response = { status, statusText, dataSize: data.length };
 
-  return { callID, request, response, latency };
+  return { callID, startTime, request, response, latency };
 };
 
 /**
@@ -39,10 +40,10 @@ const setInterceptors = (axios, calls) => {
 
   const requestInterceptor = axios.interceptors.request.use(
     (config) => {
-      const { headers, method, url, data } = config;
+      const { method, url } = config;
       config.metadata = {
         callID: callCounter,
-        request: { headers, method, url, data },
+        request: { method, url },
         startTime: Date.now(),
         resultIndex: calls.length - 1,
       };
