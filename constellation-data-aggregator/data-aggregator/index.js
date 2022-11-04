@@ -1,30 +1,34 @@
 // create express app
 const express = require("express");
 const app = express();
-const cors = require('cors');
+const cors = require("cors");
 const body = require("body-parser");
 
-const sendObjToSQLite = require('./services/sendObjToSQLite');
+const sendObjToSQLite = require("./services/sendObjToSQLite");
 
 const resetObjectToSend = require("./utils/resetObjectToSend");
 const fillObjectFromArray = require("./utils/fillObjectFromArray");
 
 app.use(cors());
-app.use(body.json());
+app.use(body.json({ limit: "10mb" }));
+
+app.get("/*", (req, res) => {
+  console.log("Health Check: GET request");
+  res.send("Health check OK");
+});
 
 app.post("/aggregator", async (req, res) => {
   try {
     let objectToSend = resetObjectToSend();
-		const data = req.body;
-    fillObjectFromArray(data, objectToSend)
+    const data = req.body;
+    fillObjectFromArray(data, objectToSend);
     await sendObjToSQLite(objectToSend);
     res.status(200).send("success");
   } catch (e) {
     res.status(500).send(JSON.stringify(e));
   }
-})
+});
 
 app.listen(3003, () => {
   console.log(`Server is listening on port 3003`);
-})
-
+});

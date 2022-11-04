@@ -6,12 +6,14 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/index.js"
+    "start": "node ./processes/init-test.js && node src/index.js && node ./processes/comp-test.js",
+    "core": "node src/index.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.1246.0",
     "axios": "^1.1.3",
     "dotenv": "^16.0.3"
   }
