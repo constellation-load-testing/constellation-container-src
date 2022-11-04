@@ -6,7 +6,7 @@ async function writeToTimeStream(input, region) {
 		console.log(typeof region)
 		const params = {
 			DatabaseName: 'constellation-timestream-db',
-			TableName: region,
+			TableName: `${region}-tests`,
 			Records: [
 				{
 					Dimensions: [
