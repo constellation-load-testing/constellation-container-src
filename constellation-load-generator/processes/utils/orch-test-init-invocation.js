@@ -5,7 +5,7 @@
 import AWS from "aws-sdk";
 import getOrchestratorLambda from "./get-orch-lambda.js";
 
-const HOME_REGION = process.env.HOME_REGION;
+const HOME_REGION = process.env.HOME_REGION || "us-west-2";
 const REGION = process.env.REGION || "us-east-1";
 const lambda = new AWS.Lambda({
   region: HOME_REGION,

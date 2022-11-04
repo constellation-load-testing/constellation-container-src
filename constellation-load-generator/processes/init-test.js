@@ -14,7 +14,7 @@ import orchTestInitInvocation from "./utils/orch-test-init-invocation.js";
 import validateOrchTestInitInvocation from "./utils/validate-orch-test-init-invocation.js";
 import controlledDelayProcess from "./utils/controlled-delay-process.js";
 
-const HOME_REGION = process.env.HOME_REGION; 
+const HOME_REGION = process.env.HOME_REGION || "us-west-2";
 const BUCKET_NAME_KEYWORD = "constellation";
 
 const s3 = new AWS.S3({
