@@ -10,7 +10,8 @@ const script = config.script;
 const VU_COUNT = config.vus;
 const DURATION = config.duration;
 
-const OUTPUT = "http://localhost:3003/aggregator";
+const OUTPUT =
+  `${process.env.OUTPUT}/aggregator` || "http://localhost:3003/aggregator";
 const BUFFER_TIME = 10000;
 
 const successStoreChance = 0.5; // % to store / 100
