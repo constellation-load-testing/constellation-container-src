@@ -9,12 +9,12 @@ function createTestsArray(dataArray) {
             {
               Name: 'test_id',
               Value: `${test.testID}`
-            }
+            },
           ],
           MeasureName: 'runtime',
           MeasureValue: `${test.runtime}`,
           MeasureValueType: 'VARCHAR',
-          Time: `${Date.now()}`,
+          Time: `${(Date.now() + Math.random() * 1000).toFixed(0)}`,
           TimeUnit: 'MILLISECONDS'
         }
       testsArray.push(timestreamObj);

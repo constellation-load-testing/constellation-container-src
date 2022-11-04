@@ -3,6 +3,7 @@ function fillObjectToSend(test, objectToSend) {
   objectToSend.tests.push(test);
 	objectToSend.calls = objectToSend.calls.concat(test.calls.map(call => {
     call.testID = test.testID;
+    call.startTime = test.startTime;
     return call;
   }))
 }
