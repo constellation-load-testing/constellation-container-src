@@ -5,7 +5,6 @@ const writeToTimeStream = require('./writeToTimeStream');
 const createTestsArray = require('../utils/createTestsArray');
 const createCallsArray = require('../utils/createCallsArray');
 
-
 const INTERVAL = 2000;
 let counter = 0;
 let bool = false;
@@ -14,7 +13,7 @@ function intervalSendToTimestream() {
 	const region = process.env.REGION;
 	const aggInterval = setInterval(async () => {
 		try {
-			console.log("yup")
+      console.log("Normal operation and getting items from cache");
 			const timestamp = Date.now();
 			const dataArr = await getItemsBetweenTimeDurationInCache(timestamp, INTERVAL)
 			await deleteItemsBeforeTimeDurationInCache(timestamp, INTERVAL);
@@ -26,7 +25,7 @@ function intervalSendToTimestream() {
 				writeToTimeStream(testsArray, callsArray, region);
 				bool = true;
 			} else if (counter === 3) {
-				console.log("nope")
+        console.log("Have not received any data in 3 counters, clearing cache");
 				clearInterval(aggInterval);
 				await emptyCache();
 			} else if (bool) {
@@ -37,5 +36,4 @@ function intervalSendToTimestream() {
 		}
 	}, INTERVAL);
 }
-
 module.exports = intervalSendToTimestream;

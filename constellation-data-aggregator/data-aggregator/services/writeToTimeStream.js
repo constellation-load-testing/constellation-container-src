@@ -1,4 +1,9 @@
-const {TimestreamWriteClient, WriteRecordsCommand} = require("@aws-sdk/client-timestream-write");
+const {
+  TimestreamWriteClient,
+  WriteRecordsCommand,
+} = require("@aws-sdk/client-timestream-write");
+
+const HOME_REGION = process.env.HOME_REGION || "us-west-2";
 
 async function writeToTimeStream(testsArray, callsArray, region) {
   console.log(callsArray[0].Dimensions[0])
