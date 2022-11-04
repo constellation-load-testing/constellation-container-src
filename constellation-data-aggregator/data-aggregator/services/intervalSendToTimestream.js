@@ -1,12 +1,12 @@
 const getItemsBetweenTimeDurationInCache = require("../db/dbfunctions/db").getItemsBetweenTimeDurationInCache;
 const { deleteItemsBeforeTimeDurationInCache } = require("../db/dbfunctions/db");
 const emptyCache = require('../db/dbfunctions/db').emptyCache;
-
 const writeToTimeStream = require('./writeToTimeStream');
+const createTestsArray = require('../utils/createTestsArray');
+const createCallsArray = require('../utils/createCallsArray');
 
-const createAggregateObject = require('../utils/createAggregateObject');
 
-const INTERVAL = 5000;
+const INTERVAL = 2000;
 let counter = 0;
 let bool = false;
 
@@ -18,10 +18,12 @@ function intervalSendToTimestream() {
 			const timestamp = Date.now();
 			const dataArr = await getItemsBetweenTimeDurationInCache(timestamp, INTERVAL)
 			await deleteItemsBeforeTimeDurationInCache(timestamp, INTERVAL);
-			const aggregateObject = createAggregateObject(dataArr, region);
-			console.log(aggregateObject)
-			if (aggregateObject[Object.keys(aggregateObject)[0]].totalTests > 0) {
-				writeToTimeStream(aggregateObject, region);
+      // console.log(dataArr);
+			if (dataArr.length > 0) { 
+			console.log("object sent")
+      const testsArray = createTestsArray(dataArr);
+      const callsArray = createCallsArray(dataArr);
+				writeToTimeStream(testsArray, callsArray, region);
 				bool = true;
 			} else if (counter === 3) {
 				console.log("nope")

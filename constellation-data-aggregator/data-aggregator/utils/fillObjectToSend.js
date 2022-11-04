@@ -1,12 +1,10 @@
-const fillErrorAndRequests = require('./fillErrorAndRequests');
-
 function fillObjectToSend(test, objectToSend) {
-	objectToSend.totalTests++;
-	objectToSend.totalRuntime += test.runtime;
-	objectToSend.totalCallRuntime += test.calls.reduce((acc, call) => acc + call.latency, 0);
-	objectToSend.calls = test.calls;
-	fillErrorAndRequests(test, objectToSend);
-	objectToSend.averageRuntime = objectToSend.totalCallRuntime / objectToSend.totalRequests;
+  objectToSend.totalTests += 1;
+  objectToSend.tests.push(test);
+	objectToSend.calls = objectToSend.calls.concat(test.calls.map(call => {
+    call.testID = test.testID;
+    return call;
+  }))
 }
 
 module.exports = fillObjectToSend;

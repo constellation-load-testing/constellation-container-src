@@ -1,31 +1,25 @@
 const {TimestreamWriteClient, WriteRecordsCommand} = require("@aws-sdk/client-timestream-write");
 
-async function writeToTimeStream(input, region) {
+async function writeToTimeStream(testsArray, callsArray, region) {
+  console.log(callsArray[0].Dimensions[0])
 	try {
 		const client = new TimestreamWriteClient({region: 'us-west-2'});
-		console.log(typeof region)
-		const params = {
+		const writeToTests = {
 			DatabaseName: 'constellation-timestream-db',
 			TableName: `${region}-tests`,
-			Records: [
-				{
-					Dimensions: [
-						{
-							Name: 'test',
-							Value: 'test'
-						}
-					],
-					MeasureName: 'ten second average',
-					MeasureValue: JSON.stringify(input),
-					MeasureValueType: 'VARCHAR',
-					Time: `${Date.now()}`,
-					TimeUnit: 'MILLISECONDS'
-				},
-			]
+			Records: testsArray
+			
 		};
-		const command = new WriteRecordsCommand(params);
-		const response = await client.send(command);
-		console.log(response);
+		const writeToCalls = {
+			DatabaseName: 'constellation-timestream-db',
+			TableName: `${region}-calls`,
+			Records: callsArray
+    };
+		const testsCommand = new WriteRecordsCommand(writeToTests);
+		const testsResponse = await client.send(testsCommand);
+		const callsCommand = new WriteRecordsCommand(writeToCalls);
+		const callsResponse = await client.send(callsCommand);
+		console.log(callsResponse);
 	} catch (err) {
 		console.error(err);
 	}

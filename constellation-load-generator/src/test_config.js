@@ -34,11 +34,11 @@ export const config = {
   vus: 5,
   duration: 5000,
   async script(axiosInstance) {
-    await axiosInstance.post("http://localhost:5000/target", {
+    await axiosInstance.post("http://localhost:5001/", {
       timeStamp: Date.now(),
     });
     await sleep(500);
-    await axiosInstance.get("http://localhost:5000/target");
+    await axiosInstance.get("http://localhost:5001/");
     await sleep(500);
   },
 };
