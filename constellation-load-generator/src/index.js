@@ -28,7 +28,7 @@ const logAxios = axios.create();
  * Starts a timer for the duration of the test, sets testRunning to false upon
  * completion
  */
- const startTimer = () => {
+const startTimer = () => {
   setTimeout(() => {
     testRunning = false;
   }, DURATION);
@@ -63,7 +63,6 @@ const checkAndStoreTest = (test) => {
  * Sends the formatted results to the output and empties the results buffer
  */
 const logAndClearResults = async () => {
-  console.log({successes, errors});
   const results = [...successes, ...errors];
   try {
     console.log(`Sending ${results.length} tests to ${OUTPUT}...`);
