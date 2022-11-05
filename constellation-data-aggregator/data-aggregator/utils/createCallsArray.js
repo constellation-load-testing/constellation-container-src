@@ -3,7 +3,7 @@ function createCallsArray(dataArray) {
   dataArray.forEach((dataObj) => {
     const parsedData = JSON.parse(dataObj.data);
     const calls = parsedData.calls;
-    calls.forEach((call) => {
+    calls.forEach((call, i) => {
       let timestreamObj = {
           Dimensions: [
             {
@@ -34,13 +34,12 @@ function createCallsArray(dataArray) {
           MeasureName: 'latency',
           MeasureValue: `${call.latency}`, 
           MeasureValueType: 'VARCHAR',
-          Time: `${(Date.now() + Math.random() * 1000).toFixed(0)}`,
+          Time: `${Date.now() + i}`,
           TimeUnit: 'MILLISECONDS'
         }
       testsArray.push(timestreamObj);
     })
   })
-  console.log(testsArray)
   return testsArray;
 }
 

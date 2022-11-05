@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import LineGraph from './components/Line';
+import BarGraph from './components/Bar';
 import {useState, useEffect} from 'react';
 import axios from 'axios';
 
@@ -14,26 +15,26 @@ function App() {
 			console.log(result.data);
 		})();
 		setInterval(async () => {
-			axios.get('http://localhost:3002/')
+			axios.get('http://localhost:3002/data')
 				.then(res => {
 					setData(res.data);
 				})
 				.catch(err => {
 					console.log(err);
 				})
-		}, 4444);
+		}, 10000);
 	}, []);
 	return (
 		<div className="App">
 			<div>
 				{!data ? null : data.regions.map((region, index) => {
 					return (
-						<div key={index} style={{padding: 50, width: 600, display: 'inline-block'}} >
-						{LineGraph(data, region, index)}
+						<div key={index} style={{padding: 50, width: 1000, display: 'inline-block'}} >
+						{LineGraph(data, region)}
+            {BarGraph(data, region)}
 					</div>
 					)
 				})}
-				{console.log(data)}
 			</div>
 		</div>
 	);

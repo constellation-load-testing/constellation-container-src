@@ -17,11 +17,12 @@ function intervalSendToTimestream() {
 			const timestamp = Date.now();
 			const dataArr = await getItemsBetweenTimeDurationInCache(timestamp, INTERVAL)
 			await deleteItemsBeforeTimeDurationInCache(timestamp, INTERVAL);
-      // console.log(dataArr);
 			if (dataArr.length > 0) { 
 			console.log("object sent")
       const testsArray = createTestsArray(dataArr);
       const callsArray = createCallsArray(dataArr);
+        console.log("error ?")
+        console.log(callsArray.length, testsArray.length);
 				writeToTimeStream(testsArray, callsArray, region);
 				bool = true;
 			} else if (counter === 3) {
@@ -32,7 +33,7 @@ function intervalSendToTimestream() {
 				counter++
 			}
 		} catch (e) {
-			console.log(e);
+			// console.log(e);
 		}
 	}, INTERVAL);
 }

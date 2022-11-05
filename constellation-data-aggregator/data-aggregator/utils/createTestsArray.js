@@ -3,7 +3,7 @@ function createTestsArray(dataArray) {
   dataArray.forEach((dataObj) => {
     const parsedData = JSON.parse(dataObj.data);
     const test = parsedData.tests;
-    test.forEach((test) => {
+    test.forEach((test, i) => {
       let timestreamObj = {
           Dimensions: [
             {
@@ -14,7 +14,7 @@ function createTestsArray(dataArray) {
           MeasureName: 'runtime',
           MeasureValue: `${test.runtime}`,
           MeasureValueType: 'VARCHAR',
-          Time: `${(Date.now() + Math.random() * 1000).toFixed(0)}`,
+          Time: `${Date.now() + i}`,
           TimeUnit: 'MILLISECONDS'
         }
       testsArray.push(timestreamObj);

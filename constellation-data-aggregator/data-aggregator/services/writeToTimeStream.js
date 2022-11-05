@@ -6,28 +6,40 @@ const {
 const HOME_REGION = process.env.HOME_REGION || "us-west-2";
 
 async function writeToTimeStream(testsArray, callsArray, region) {
-  console.log(callsArray[0].Dimensions[0])
-	try {
-		const client = new TimestreamWriteClient({region: 'us-west-2'});
-		const writeToTests = {
-			DatabaseName: 'constellation-timestream-db',
-			TableName: `${region}-tests`,
-			Records: testsArray
-			
-		};
-		const writeToCalls = {
-			DatabaseName: 'constellation-timestream-db',
-			TableName: `${region}-calls`,
-			Records: callsArray
+	const client = new TimestreamWriteClient({region: HOME_REGION});
+  let arrayToWrite = [];
+  try {
+    for (let i = 1; i <= testsArray.length; i++) {
+      let testObj = testsArray[i];
+      arrayToWrite.push(testObj);
+      if (arrayToWrite.length === 100 || i === testsArray.length) {
+        const params = {
+          DatabaseName: 'constellation-timestream-db',
+          TableName: `${region}-tests`,
+          Records: arrayToWrite,
+        };
+        const command = new WriteRecordsCommand(params);
+        const testsResponse = await client.send(command);
+        arrayToWrite = [];
+      }
     };
-		const testsCommand = new WriteRecordsCommand(writeToTests);
-		const testsResponse = await client.send(testsCommand);
-		const callsCommand = new WriteRecordsCommand(writeToCalls);
-		const callsResponse = await client.send(callsCommand);
-		console.log(callsResponse);
-	} catch (err) {
-		console.error(err);
-	}
+    for (let i = 1; i <= callsArray.length; i++) {
+      let callObj = callsArray[i];
+      arrayToWrite.push(callObj);
+      if (arrayToWrite.length === 100 || i === testsArray.length) {
+        const params = {
+          DatabaseName: 'constellation-timestream-db',
+          TableName: `${region}-calls`,
+          Records: arrayToWrite,
+        };
+        const command = new WriteRecordsCommand(params);
+        const callsResponse = await client.send(command);
+        arrayToWrite = [];
+      }
+    };
+  } catch (err) {
+    console.error(err);
+  }
 }
 
 module.exports = writeToTimeStream;
