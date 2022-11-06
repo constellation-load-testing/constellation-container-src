@@ -5,35 +5,38 @@ const {
 
 const HOME_REGION = process.env.HOME_REGION || "us-west-2";
 
-async function writeToTimeStream(input, region) {
+async function writeToTimeStream(testsArray, callsArray, region) {
+	const client = new TimestreamWriteClient({region: HOME_REGION});
+  let arrayToWrite = [];
   try {
-    const client = new TimestreamWriteClient({
-      region: HOME_REGION,
-    });
-    console.log(`Writing to timestream DB in: ${HOME_REGION}`);
-    console.log(typeof region);
-    const params = {
-      DatabaseName: "constellation-timestream-db",
-      TableName: region,
-      Records: [
-        {
-          Dimensions: [
-            {
-              Name: "test",
-              Value: "test",
-            },
-          ],
-          MeasureName: "ten second average",
-          MeasureValue: JSON.stringify(input),
-          MeasureValueType: "VARCHAR",
-          Time: `${Date.now()}`,
-          TimeUnit: "MILLISECONDS",
-        },
-      ],
+    for (let i = 1; i <= testsArray.length; i++) {
+      let testObj = testsArray[i];
+      arrayToWrite.push(testObj);
+      if (arrayToWrite.length === 100 || i === testsArray.length) {
+        const params = {
+          DatabaseName: 'constellation-timestream-db',
+          TableName: `${region}-tests`,
+          Records: arrayToWrite,
+        };
+        const command = new WriteRecordsCommand(params);
+        const testsResponse = await client.send(command);
+        arrayToWrite = [];
+      }
     };
-    const command = new WriteRecordsCommand(params);
-    const response = await client.send(command);
-    console.log(response);
+    for (let i = 1; i <= callsArray.length; i++) {
+      let callObj = callsArray[i];
+      arrayToWrite.push(callObj);
+      if (arrayToWrite.length === 100 || i === testsArray.length) {
+        const params = {
+          DatabaseName: 'constellation-timestream-db',
+          TableName: `${region}-calls`,
+          Records: arrayToWrite,
+        };
+        const command = new WriteRecordsCommand(params);
+        const callsResponse = await client.send(command);
+        arrayToWrite = [];
+      }
+    };
   } catch (err) {
     console.error(err);
   }
