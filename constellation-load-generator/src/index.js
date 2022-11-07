@@ -17,7 +17,7 @@ const BUFFER_TIME = 10000;
 const successStoreChance = 0.5; // % to store / 100
 const errorStoreChance = 0.75; // % to store / 100
 
-let testID = 0;
+let testID = 1;
 let testRunning = true;
 const successes = [];
 const errors = [];
@@ -92,7 +92,7 @@ const runTest = (userAxios) => {
     calls: [],
   };
 
-  const clearInterceptors = setInterceptors(userAxios, test.calls);
+  const clearInterceptors = setInterceptors(userAxios, test);
 
   return script(userAxios).finally(async () => {
     test.runtime = Date.now() - test.startTime;
