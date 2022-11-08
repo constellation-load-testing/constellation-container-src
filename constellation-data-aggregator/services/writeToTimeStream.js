@@ -3,7 +3,7 @@ const {
   WriteRecordsCommand,
 } = require("@aws-sdk/client-timestream-write");
 
-const HOME_REGION = process.env.HOME_REGION || "us-west-2";
+const HOME_REGION = process.env.HOME_REGION || "us-east-1";
 
 async function writeToTimeStream(testsArray, callsArray, region) {
 	const client = new TimestreamWriteClient({region: HOME_REGION});
@@ -20,6 +20,7 @@ async function writeToTimeStream(testsArray, callsArray, region) {
         };
         const command = new WriteRecordsCommand(params);
         const testsResponse = await client.send(command);
+        console.log(testsResponse);
         arrayToWrite = [];
       }
     };
