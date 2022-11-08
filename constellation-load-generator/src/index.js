@@ -4,11 +4,11 @@ import "dotenv/config";
 import axios from "axios";
 
 import setInterceptors from "./services/setInterceptors.js";
-import { config } from "./test_config.js";
+import { script } from "./test_config.js";
 
-const script = config.script;
-const VU_COUNT = config.vus;
-const DURATION = config.duration;
+const VU_COUNT = Number(process.env.VU);
+const DURATION = Number(process.env.DURATION);
+console.log({ VU: VU_COUNT, DURATION });
 
 const OUTPUT =
   `${process.env.OUTPUT}/aggregator` || "http://localhost:3003/aggregator";
