@@ -1,5 +1,7 @@
+const sanitizeStartTime = require('./sanitizeStartTime.js');
 function createTestsArray(dataArray) {
   const testsArray = [];
+  const seenTimes = {};
   dataArray.forEach((dataObj) => {
     const parsedData = JSON.parse(dataObj.data);
     const test = parsedData.tests;
@@ -9,12 +11,12 @@ function createTestsArray(dataArray) {
             {
               Name: 'test_id',
               Value: `${test.testID}`
-            },
+            }
           ],
           MeasureName: 'runtime',
           MeasureValue: `${test.runtime}`,
-          MeasureValueType: 'VARCHAR',
-          Time: `${Date.now() + i}`,
+          MeasureValueType: 'DOUBLE',
+          Time: `${sanitizeStartTime(test.startTime, seenTimes)}`,
           TimeUnit: 'MILLISECONDS'
         }
       testsArray.push(timestreamObj);

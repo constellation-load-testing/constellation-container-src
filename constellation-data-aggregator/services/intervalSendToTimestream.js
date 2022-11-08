@@ -5,7 +5,7 @@ const writeToTimeStream = require('./writeToTimeStream');
 const createTestsArray = require('../utils/createTestsArray');
 const createCallsArray = require('../utils/createCallsArray');
 
-const INTERVAL = 2000;
+const INTERVAL = 5000;
 let counter = 0;
 let bool = false;
 
@@ -21,11 +21,10 @@ function intervalSendToTimestream() {
 			console.log("object sent")
       const testsArray = createTestsArray(dataArr);
       const callsArray = createCallsArray(dataArr);
-        console.log("error ?")
-        console.log(callsArray.length, testsArray.length);
 				writeToTimeStream(testsArray, callsArray, region);
 				bool = true;
-			} else if (counter === 3) {
+        counter = 0;
+			} else if (counter === 5) {
         console.log("Have not received any data in 3 counters, clearing cache");
 				clearInterval(aggInterval);
 				await emptyCache();

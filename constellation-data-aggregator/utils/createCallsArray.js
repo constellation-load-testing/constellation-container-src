@@ -32,8 +32,8 @@ function createCallsArray(dataArray) {
             },
           ],
           MeasureName: 'latency',
-          MeasureValue: `${call.latency}`, 
-          MeasureValueType: 'VARCHAR',
+          MeasureValue: `${call.latency}`,
+          MeasureValueType: 'DOUBLE',
           Time: `${Date.now() + i}`,
           TimeUnit: 'MILLISECONDS'
         }
