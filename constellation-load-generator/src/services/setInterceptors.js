@@ -42,7 +42,7 @@ const setInterceptors = (axios, { testID, calls }) => {
     (config) => {
       const { method, url } = config;
       config.metadata = {
-        callID: testID + callCounter,
+        callID: Number(`${testID}${callCounter}`),
         request: { method, url },
         startTime: Date.now(),
         resultIndex: calls.length - 1,

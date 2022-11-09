@@ -68,6 +68,8 @@ const logAndClearResults = async () => {
     console.log(`Sending ${results.length} tests to ${OUTPUT}...`);
     await logAxios.post(OUTPUT, results);
     results.length = 0;
+    successes.length = 0;
+    errors.length = 0;
 
     console.log("Log sent, buffer cleared");
   } catch (e) {
