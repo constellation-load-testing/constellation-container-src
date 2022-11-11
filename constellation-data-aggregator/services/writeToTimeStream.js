@@ -6,7 +6,7 @@ const {
 const HOME_REGION = process.env.HOME_REGION || "us-east-1";
 
 async function writeToTimeStream(testsArray, callsArray, region) {
-	const client = new TimestreamWriteClient({region: HOME_REGION});
+	const client = new TimestreamWriteClient({region: HOME_REGION, maxAttempts: 10});
   let arrayToWrite = [];
   try {
     for (let i = 1; i <= testsArray.length; i++) {
