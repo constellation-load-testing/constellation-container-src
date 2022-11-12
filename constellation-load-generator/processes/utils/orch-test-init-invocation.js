@@ -32,10 +32,19 @@ const orchTestInitInvocation = async () => {
     console.log("poll payload", { payload: rawStringPayload });
     return rawStringPayload; // raw string payload
   } catch (e) {
-    console.log({
-      message: "Unable to invoke orchestrator lambda",
-      error: e,
-    });
+    // TooManyRequestsException handling
+    if (e.name === "TooManyRequestsException") {
+      // randomize between 2000 and 100000 ms
+      const randomTime = Math.floor(Math.random() * 8000) + 2000;
+      console.log("TooManyRequestsException, waiting", randomTime, "ms");
+      await new Promise((resolve) => setTimeout(resolve, randomTime));
+      return await orchTestInitInvocation();
+    } else {
+      console.log({
+        message: "Unable to invoke orchestrator lambda",
+        error: e,
+      });
+    }
   }
 };
 
