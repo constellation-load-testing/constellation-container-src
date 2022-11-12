@@ -72,10 +72,13 @@ const initTest = async () => {
     );
 
     // poll for termination, return of poll is not required
+    // poll duration is randomized between 2 - 10 seconds - this is ammend throttling
+    // get random number between 2000 and 10000
+    const randomPollDuration = Math.floor(Math.random() * 8000) + 2000;
     const pollReturn = await poll(
       orchTestInitInvocation,
       validateOrchTestInitInvocation,
-      1000
+      randomPollDuration
     );
 
     // - this determines when the test should start (and this process terminates)
