@@ -14,9 +14,6 @@ const OUTPUT =
   `${process.env.OUTPUT}/aggregator` || "http://localhost:3003/aggregator";
 const BUFFER_TIME = 10000;
 
-const successStoreChance = 0.5; // % to store / 100
-const errorStoreChance = 0.75; // % to store / 100
-
 let testID = 1;
 let testRunning = true;
 const successes = [];
@@ -52,9 +49,9 @@ const checkAndStoreTest = (test) => {
     return call.response.status < 0 || call.response.status >= 400;
   })
 
-  if (error && Math.random() < errorStoreChance) {
+  if (error) {
     errors.push(test);
-  } else if (!error && Math.random() < successStoreChance) {
+  } else {
     successes.push(test);
   }
 };
@@ -67,7 +64,6 @@ const logAndClearResults = async () => {
   try {
     console.log(`Sending ${results.length} tests to ${OUTPUT}...`);
     await logAxios.post(OUTPUT, results);
-    results.length = 0;
     successes.length = 0;
     errors.length = 0;
 
